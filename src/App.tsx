@@ -1,24 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from "./components/Header";
+import Indicator from "./components/Indicator";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <section style={{display: "flex", flexDirection: "column"}}>
+        <Indicator title="New Cases" metric="cases" location="USA" />
+        <Indicator title="Death Rates" metric="deaths" location="USA" />
+        <Indicator title="Vaccination Rates" metric="vacc" location="USA" />
+        <Indicator title="Hospitalization" metric="hospital" location="USA" />
+      </section>
     </div>
   );
 }
