@@ -1,0 +1,139 @@
+.leaflet-container {
+  height: 600px;
+  width: 100%;
+}
+
+#map-component {
+  width: 100%;
+}
+
+.leaflet-touch .leaflet-bar a {
+  width: 10px;
+  height: 10px;
+  line-height: 9px;
+  padding: 0.6rem, 0.6rem;
+}
+
+.leaflet-safari .leaflet-bar a {
+  width: 10px;
+  height: 10px;
+  line-height: 9px;
+  padding: 0.6rem, 0.6rem;
+}
+
+.leaflet-bar a:hover {
+  background-color: #e4e4e4;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in,
+.leaflet-control-zoom .leaflet-control-zoom-out {
+  font-size: 22px;
+  margin: 0.35rem;
+  text-indent: -1.2px;
+  /*    width: 10px;
+    height: 10px;
+    line-height: 9px;
+    padding: 0.6rem, 0.6rem;
+*/
+}
+
+.leaflet-container .leaflet-control-attribution a {
+  font-size: 0.7rem;
+}
+
+.esri-dynamic-attribution {
+  font-size: 0.7rem;
+}
+
+/*.leaflet-control-layers-base input[checked] + span {
+    background-color: yellow;
+}*/
+
+.leaflet-control-layers-base span:hover {
+  background-color: #a5df00;
+}
+
+.leafLegend {
+  font-size: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: white;
+  border-radius: 4px;
+}
+
+.legend-title,
+.min-value,
+.max-value {
+  font-size: 13px;
+  text-align: center;
+}
+
+.info.legend.leaflet-control {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 6px;
+}
+/*
+.legend .leafLegend {
+  margin-right: 3px;
+}
+*/
+.legend {
+  width: 165px;
+  font-size: 13px;
+  line-height: 15px;
+}
+
+br {
+  line-height: 1px;
+}
+
+.legend i {
+  width: 50px;
+  height: 13px;
+  float: right;
+  margin: 1px;
+  opacity: 0.5;
+}
+/*
+.legend-title {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}
+*/
+
+.map-div {
+  height: 800px;
+  width: 95%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+}
+
+.leaflet-container {
+  height: 1000px;
+}
+
+.spinner-div {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  width: 30%;
+  height: 25%;
+  position: absolute;
+  left: 35%;
+  top: 25%;
+  z-index: 1000;
+}
+
+.spinner-alt {
+  top: 40%;
+}
+
+.spinner-text {
+  top: 53%;
+  left: 0%;
+  position: relative;
+  text-align: center;
+}

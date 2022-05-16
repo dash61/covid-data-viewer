@@ -69,11 +69,25 @@ export interface ICovidData {
   excess_mortality_cumulative: number;
   excess_mortality: number;
   excess_mortality_cumulative_per_million: number;
+  data: number; // dummy field to aid in mapping fields above to a 'data' attribute
 }
+
 export type IMetricData = Pick<ICovidData,
   "_id" | "date" | "new_deaths_smoothed" | "new_cases_smoothed" | "new_vaccinations_smoothed" | "hosp_patients">;
 
-// export type IDeathData = Pick<ICovidData, "_id" | "date" | "new_deaths_smoothed">;
-// export type ICasesData = Pick<ICovidData, "_id" | "date" | "new_cases_smoothed">;
-// export type IVaccData = Pick<ICovidData, "_id" | "date" | "new_vaccinations_smoothed">;
-// export type IHospitalData = Pick<ICovidData, "_id" | "date" | "hosp_patients">;
+export type IAllMetrics = Exclude<ICovidData,
+  "_id" | "iso_code" | "continent" | "location" | "date" | "tests_units">
+
+// export type IAllMetricKeys = keyof IAllMetricsKV;
+
+export interface ICountryData {
+  _id: {
+    location: string;
+    iso_code: string;
+  }
+}
+
+export enum DataSets {
+  DataSet1 = 1,
+  DataSet2 = 2,
+}

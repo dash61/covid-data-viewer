@@ -1,4 +1,4 @@
-
+// Fancy header - ha
 const Header = (): JSX.Element => {
   return (
     <header className='header'>

@@ -1,3 +1,6 @@
+body {
+  background-color: darkslategrey;
+}
 .App {
   text-align: center;
 }
@@ -17,3 +20,27 @@
   color: #61dafb;
 }
 
+.header {
+  color: white;
+}
+
+.labels {
+  padding-left: 10px;
+  padding-right: 5px;
+}
+
+.control-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: white;
+  border-radius: 5px;
+}
+
+.metric-banner {
+  max-width: 95%;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background: white;
+}

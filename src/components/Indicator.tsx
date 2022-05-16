@@ -3,12 +3,16 @@ import ChartXY from "./Chart";
 import { format, parseISO } from "date-fns";
 
 import { getDataPoints } from "../api/api";
-import { IMetricData } from "../interfaces";
+import { ICovidData, DataSets } from "../interfaces";
+import { detectEmptyObject } from "../utils/utils";
 
 interface IProps {
   title: string;
+  title2?: string;
   metric: string;
   location: string;
+  metric2?: string;
+  location2?: string;
 }
 
 /* TODO -
@@ -16,32 +20,40 @@ interface IProps {
      (ie, need to set startTime and endTime).
    - 
 */
+// let oneGraph = true;
 
 export default function Indicator(props: IProps): JSX.Element {
   const [startTime, ] = React.useState(1583038800);    // default start = 3/1/2020; in seconds
   const [endTime, ] = React.useState(Math.floor(Date.now() / 1000)); // default end = now
-  const [yAxisCounts, setYAxisCounts] = React.useState<number[]>([]);
+  const [yAxisCounts1, setYAxisCounts1] = React.useState<number[]>([]);
+  const [yAxisCounts2, setYAxisCounts2] = React.useState<number[]>([]);
   const [dateLabels, setDateLabels] = React.useState<string[]>([]);
+  const [title, setTitle] = React.useState("");
+  const [oneGraph, setOneGraph] = React.useState(true);
 
   const basicChartData = [
     {
-        label: props.title,
-        fill: true,
-        backgroundColor: "transparent",
-        borderColor: "grey",
-        data: yAxisCounts,
+      label: props.title,
+      fill: true,
+      backgroundColor: "transparent",
+      borderColor: "blue",
+      data: yAxisCounts1,
+    },
+    {
+      label: props.title2,
+      fill: true,
+      backgroundColor: "transparent",
+      borderColor: "red",
+      data: yAxisCounts2,
     },
   ];
 
-  async function createChartData(input: IMetricData[]) {
+  async function createChartData(input: ICovidData[], which: DataSets) {
     let countInEachColumn: number[] = [];
-    switch (props.metric) {
-      case "cases": countInEachColumn = input.map(item => item.new_cases_smoothed); break;
-      case "deaths": countInEachColumn = input.map(item => item.new_deaths_smoothed); break;
-      case "vacc": countInEachColumn = input.map(item => item.new_vaccinations_smoothed); break;
-      case "hospital": countInEachColumn = input.map(item => item.hosp_patients); break;
-      default: break;
-    }
+    countInEachColumn = input.map(item => {
+      const field = item.data;
+      return (item as any)[field]; // not sure why this is needed; fix this
+    });
 
     const xAxisLabels = input.map(item => {
       const isoDate = parseISO(item.date);
@@ -49,27 +61,44 @@ export default function Indicator(props: IProps): JSX.Element {
     });    
     // console.log("countInEachColumn=", countInEachColumn, " xAxisLabels=", xAxisLabels);
 
-    setYAxisCounts(countInEachColumn);
-    setDateLabels(xAxisLabels);
+    if (which === DataSets.DataSet1) {
+      setYAxisCounts1(countInEachColumn);
+      setDateLabels(xAxisLabels);
+    } else {
+      setYAxisCounts2(countInEachColumn);
+    }
   }
 
-  const fetchData = async (
-      metric: string,
-      startTime: number,
-      endTime: number,
-      location: string
-    ) => {
-    
-    const data = await getDataPoints(metric, startTime, endTime, location); // rtns array
-    if (data) {
-      await createChartData(data);
+  const fetchData = React.useCallback(async (
+    metric: string,
+    startTime: number,
+    endTime: number,
+    location: string,
+    which: DataSets
+  ) => {
+    // console.log("(indicator) metric = ", metric, startTime, endTime, location);
+    const data = await getDataPoints(metric, startTime, endTime, location);
+    if (data && !detectEmptyObject(data)) {
+      await createChartData(data, which);
+      return data;
     }
-  };
+  }, []);
 
   React.useEffect(() => {
-    fetchData(props.metric, startTime, endTime, props.location);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    fetchData(props.metric, startTime, endTime, props.location, DataSets.DataSet1);
+    setTitle(`${props.title} - ${props.location}`);
+    if (props.metric2 && props.location2) {
+      if (props.metric !== props.metric2 || props.location !== props.location2) {
+        // console.log("indicator.tsx - oneGraph=false");
+        setOneGraph(false);
+        fetchData(props.metric2, startTime, endTime, props.location2, DataSets.DataSet2);
+        setTitle(`${props.title} - ${props.location}  /  ${props.title2} - ${props.location2}`);
+      } else {
+        setOneGraph(true);
+      }
+    }
+  }, [props.metric, props.metric2, props.location, props.location2,
+      startTime, endTime, fetchData, props.title, props.title2]);
 
   return (
       <div style=
@@ -81,9 +110,10 @@ export default function Indicator(props: IProps): JSX.Element {
           boxShadow: "0 3px 9px rgba(0, 0, 0, 0.5)"
         }}>
           <ChartXY 
-              title={`${props.title} - ${props.location}`}
+              title={title}
               data={basicChartData}
               labels={dateLabels}
+              oneGraph={oneGraph}
           />
       </div>
   );
